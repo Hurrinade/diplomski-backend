@@ -57,7 +57,7 @@ func FormatData(source string, data io.ReadCloser) Response {
 		}
 
 		eventData = ResponseWeatherData{
-			Temperature:      fmt.Sprintf("%.2f", temperature),
+			Temperature:      fmt.Sprintf("%.1f", temperature),
 			HeatIndex:        fmt.Sprintf("%.2f", heatIndex(HeatIndexInput{
 				Temperature: temperature,
 				Humidity: humidity,
@@ -73,7 +73,7 @@ func FormatData(source string, data io.ReadCloser) Response {
 			WindSide:         respBody.WindDirection,
 			PrecipationRate:  respBody.DailyRainin,
 			PrecipationTotal: respBody.Rainin,
-			Humidity:         fmt.Sprintf("%.2f", humidity),
+			Humidity:         fmt.Sprintf("%d", int(humidity)),
 			DewPoint:         respBody.DewPoint,
 		}
 	} else if source == "wu" {
@@ -92,7 +92,7 @@ func FormatData(source string, data io.ReadCloser) Response {
 		observation := respBody.Observations[0]
 
 		eventData = ResponseWeatherData{
-			Temperature:      fmt.Sprintf("%.2f", observation.Metric.Temp),
+			Temperature:      fmt.Sprintf("%.1f", observation.Metric.Temp),
 			HeatIndex:        fmt.Sprintf("%.2f", observation.Metric.HeatIndex),
 			Pressure:         fmt.Sprintf("%.2f", observation.Metric.Pressure),
 			SolarRadiation:   fmt.Sprintf("%.2f", observation.SolarRadiation),
@@ -104,7 +104,7 @@ func FormatData(source string, data io.ReadCloser) Response {
 			WindSide:         getWindSide(observation.Winddir),
 			PrecipationRate:  fmt.Sprintf("%.2f", observation.Metric.PrecipRate),
 			PrecipationTotal: fmt.Sprintf("%.2f", observation.Metric.PrecipTotal),
-			Humidity:         fmt.Sprintf("%.2f", observation.Humidity),
+			Humidity:         fmt.Sprintf("%d", observation.Humidity),
 			DewPoint:         fmt.Sprintf("%.2f", observation.Metric.Dewpt),
 			Elevation:        fmt.Sprintf("%d", observation.Metric.Elev),
 		}

@@ -36,7 +36,7 @@ type Observation struct {
 	Lat                float64   `json:"lat"`
 	UV                 float64   `json:"uv"`
 	Winddir            float64       `json:"winddir"`
-	Humidity           float64       `json:"humidity"`
+	Humidity           int       `json:"humidity"`
 	QCStatus           float64       `json:"qcStatus"`
 	Metric             Metric    `json:"metric"`
 }
