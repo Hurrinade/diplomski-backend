@@ -61,7 +61,7 @@ func FormatData(source string, data io.ReadCloser) Response {
 			HeatIndex:        fmt.Sprintf("%.2f", heatIndex(HeatIndexInput{
 				Temperature: temperature,
 				Humidity: humidity,
-				Fahrenheit: true,
+				Fahrenheit: false,
 			})),
 			Pressure:         respBody.Pressure,
 			SolarRadiation:   respBody.SolarRadiation,
@@ -72,7 +72,7 @@ func FormatData(source string, data io.ReadCloser) Response {
 			WindDirection:    respBody.WindDirectionF,
 			WindSide:         respBody.WindDirection,
 			PrecipationRate:  respBody.DailyRainin,
-			PrecipationTotal: respBody.Rainin,
+			PrecipationTotal: respBody.Precipitation,
 			Humidity:         fmt.Sprintf("%d", int(humidity)),
 			DewPoint:         respBody.DewPoint,
 		}
