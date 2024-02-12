@@ -21,7 +21,7 @@ func GetEvents(ctx *gin.Context, apiDetails ApiDetails) {
 		}
 	}()
 
-	// Create gin stream where it will wait for data that is fetched every 15 seconds and it will send it as sse event
+	// Create gin stream where it will wait for data that is fetched every 300 seconds and it will send it as sse event
 	ctx.Stream(func(w io.Writer) bool {
 		if msg, ok := <-chanStream; ok {
 			ctx.SSEvent("data", msg)
