@@ -1,2 +1,0 @@
-/* Validate input */
-package controller

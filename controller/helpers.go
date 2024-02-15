@@ -7,6 +7,7 @@ import (
 	"math"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func FormatData(source string, data io.ReadCloser) Response {
@@ -75,6 +76,7 @@ func FormatData(source string, data io.ReadCloser) Response {
 			PrecipationTotal: respBody.Precipitation,
 			Humidity:         fmt.Sprintf("%d", int(humidity)),
 			DewPoint:         respBody.DewPoint,
+			Date: 			  time.Now(),
 		}
 	} else if source == "wu" {
 		var respBody WuWeatherData
@@ -107,6 +109,7 @@ func FormatData(source string, data io.ReadCloser) Response {
 			Humidity:         fmt.Sprintf("%d", observation.Humidity),
 			DewPoint:         fmt.Sprintf("%.2f", observation.Metric.Dewpt),
 			Elevation:        fmt.Sprintf("%d", observation.Metric.Elev),
+			Date:			  time.Now(),
 		}
 	}
 

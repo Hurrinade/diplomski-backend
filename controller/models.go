@@ -45,24 +45,6 @@ type WuWeatherData struct {
 	Observations []Observation `json:"observations"`
 }
 
-type ResponseWeatherData struct {
-	Temperature      string
-	HeatIndex        string
-	Pressure         string
-	SolarRadiation  string
-	UV               string
-	WindSpeed        string
-	WindGust         string
-	WindChill        string
-	WindDirection    string
-	WindSide         string
-	PrecipationRate  string
-	PrecipationTotal string
-	Humidity         string
-	DewPoint         string
-	Elevation        string
-}
-
 type PljusakWeatherData struct {
 	Data             string    `json:"data"`
 	Date             string    `json:"datum"`
@@ -104,6 +86,25 @@ type PljusakWeatherData struct {
 	Rtfreq           string       `json:"all_rtfreq"`
 }
 
+type ResponseWeatherData struct {
+	Temperature      string
+	HeatIndex        string
+	Pressure         string
+	SolarRadiation  string
+	UV               string
+	WindSpeed        string
+	WindGust         string
+	WindChill        string
+	WindDirection    string
+	WindSide         string
+	PrecipationRate  string
+	PrecipationTotal string
+	Humidity         string
+	DewPoint         string
+	Elevation        string
+	Date        time.Time
+}
+
 type Response struct {
 	Error bool 					`json:"error"`
 	Notice string				`json:"notice"`
@@ -116,3 +117,21 @@ type HeatIndexInput struct {
 	Fahrenheit  bool
 }
 
+type DbData struct {
+	Date time.Time 		`json:"date" bson:"date"`
+	Temperature string 	`json:"temperature" bson:"temperature"`
+	WindSpeed string	`json:"windspeed" bson:"windspeed"`
+	Precipation string	`json:"precipation" bson:"precipation"`
+	Humidity string		`json:"humidity" bson:"humidity"`
+}
+
+type JointDbData struct {
+	VrapceData []DbData `json:"vrapceData"`
+	MlinoviData []DbData `json:"mlinoviData"`
+}
+
+type ResponseChart struct {
+	Error bool 					`json:"error"`
+	Notice string				`json:"notice"`
+	Data JointDbData 			`json:"data"`
+}
