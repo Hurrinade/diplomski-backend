@@ -19,24 +19,35 @@ func GetChartData(ctx *gin.Context, cl *mongo.Client) {
 	
 	go func() {
 		defer close(chanStream)
+		chanStream <- sendChartEvent(ctx, cl)
+		ticker := time.NewTicker(300 * time.Second)
+		defer ticker.Stop()
+
 		for {
-			chanStream <- sendChartEvent(ctx, cl)
-			time.Sleep(300 * time.Second)
+			select {
+				case <-ctx.Done(): // Check if the client has disconnected
+					log.Println("Client disconnected")
+					return
+				case <-ticker.C: // Channel where ticks are delivered
+					chanStream <- sendChartEvent(ctx, cl)
+				}
 		}
 	}()
 
-	gone := ctx.Stream(func(w io.Writer) bool {
-		if msg, ok := <-chanStream; ok {
-			ctx.SSEvent("data", msg)
-			return true
+	ctx.Stream(func(w io.Writer) bool {
+		select {
+		case msg, ok := <-chanStream:
+			if ok {
+				ctx.SSEvent("data", msg)
+				return true
+			}
+			log.Println("Channel closed")
+			return false
+		case <-ctx.Done(): // Check if the client has disconnected
+			log.Println("Client disconnected")
+			return false
 		}
-
-		return false
 	})
-
-	if gone {
-		log.Println("Client disconnected")
-	}
 }
 
 func GetEvents(ctx *gin.Context, cl *mongo.Client, location string, apiDetails ApiDetails) {
