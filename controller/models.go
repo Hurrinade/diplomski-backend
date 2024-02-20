@@ -135,3 +135,7 @@ type ResponseChart struct {
 	Notice string				`json:"notice"`
 	Data JointDbData 			`json:"data"`
 }
+
+type Location struct {
+	Location string `uri:"location" binding:"required"`
+}

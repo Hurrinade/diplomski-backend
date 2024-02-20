@@ -101,6 +101,28 @@ func GetEvents(ctx *gin.Context, cl *mongo.Client, location string, apiDetails A
 	})
 }
 
+func sendEvent(ctx *gin.Context, apiDetails ApiDetails, cl *mongo.Client) Response {
+	weatherDataResponse, err := http.Get(apiDetails.PljusakURL)
+
+	if err != nil {
+		log.Println("Error when fetching endpoint pljusak",err)
+	}
+
+	if weatherDataResponse.StatusCode == http.StatusOK {
+		eventData := FormatData("pljusak", weatherDataResponse.Body)
+		return eventData
+	} else {
+		weatherDataResponse, err = http.Get(apiDetails.WuURL)
+
+		if err != nil {
+			log.Println("Error when fetching endpoint WU",err)
+		}
+
+		eventData := FormatData("wu", weatherDataResponse.Body)
+		return eventData
+	}
+}
+
 func sendChartEvent(ctx *gin.Context, cl *mongo.Client) ResponseChart{
 	db := cl.Database("meteosite")
 
@@ -144,27 +166,5 @@ func sendChartEvent(ctx *gin.Context, cl *mongo.Client) ResponseChart{
 			VrapceData: resultsVrapce,
 			MlinoviData: resultsMlinovi,
 		},
-	}
-}
-
-func sendEvent(ctx *gin.Context, apiDetails ApiDetails, cl *mongo.Client) Response {
-	weatherDataResponse, err := http.Get(apiDetails.PljusakURL)
-
-	if err != nil {
-		log.Println("Error when fetching endpoint pljusak",err)
-	}
-
-	if weatherDataResponse.StatusCode == http.StatusOK {
-		eventData := FormatData("pljusak", weatherDataResponse.Body)
-		return eventData
-	} else {
-		weatherDataResponse, err = http.Get(apiDetails.WuURL)
-
-		if err != nil {
-			log.Println("Error when fetching endpoint WU",err)
-		}
-
-		eventData := FormatData("wu", weatherDataResponse.Body)
-		return eventData
 	}
 }
